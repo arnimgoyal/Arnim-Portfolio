@@ -1,0 +1,473 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Mission Control Interface - Arnim Goyal */
+/* HUD Theme with Cyberpunk/Futuristic Aesthetic */
+
+:root {
+  /* Core Colors */
+  --mc-black: #000000;
+  --mc-deep-blue: #0a0f1c;
+  --mc-navy: #0d1429;
+  --mc-cyan: #00f0ff;
+  --mc-cyan-dim: rgba(0, 240, 255, 0.3);
+  --mc-green: #00ff88;
+  --mc-green-dim: rgba(0, 255, 136, 0.3);
+  --mc-purple: #b829ff;
+  --mc-purple-dim: rgba(184, 41, 255, 0.3);
+  --mc-orange: #ff6b00;
+  --mc-red: #ff0040;
+  --mc-white: #ffffff;
+  --mc-gray: #8a9bb8;
+  --mc-gray-dark: #1a2332;
+  
+  /* HUD Colors */
+  --hud-grid: rgba(0, 240, 255, 0.05);
+  --hud-line: rgba(0, 240, 255, 0.2);
+  --hud-glow: rgba(0, 240, 255, 0.4);
+  
+  /* Shadcn overrides */
+  --background: 220 30% 4%;
+  --foreground: 180 100% 50%;
+  --card: 220 30% 6%;
+  --card-foreground: 180 100% 50%;
+  --popover: 220 30% 6%;
+  --popover-foreground: 180 100% 50%;
+  --primary: 180 100% 50%;
+  --primary-foreground: 220 30% 4%;
+  --secondary: 220 30% 10%;
+  --secondary-foreground: 180 100% 50%;
+  --muted: 220 20% 15%;
+  --muted-foreground: 215 20% 55%;
+  --accent: 280 100% 56%;
+  --accent-foreground: 0 0% 100%;
+  --destructive: 345 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 20% 20%;
+  --input: 220 20% 15%;
+  --ring: 180 100% 50%;
+  --radius: 0.25rem;
+}
+
+/* Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: auto;
+}
+
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+body {
+  font-family: 'JetBrains Mono', 'Consolas', 'Monaco', monospace;
+  background: var(--mc-black);
+  color: var(--mc-cyan);
+  overflow-x: hidden;
+  cursor: none;
+  min-height: 100vh;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--mc-deep-blue);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--mc-cyan-dim);
+  border-radius: 2px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--mc-cyan);
+}
+
+/* Selection */
+::selection {
+  background: var(--mc-cyan-dim);
+  color: var(--mc-white);
+}
+
+/* HUD Grid Background */
+.hud-grid {
+  background-image: 
+    linear-gradient(var(--hud-grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--hud-grid) 1px, transparent 1px);
+  background-size: 50px 50px;
+  background-position: center center;
+}
+
+/* Scanning Line Animation */
+@keyframes scanline {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(100vh);
+  }
+}
+
+.scanning-line {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--mc-cyan), transparent);
+  box-shadow: 0 0 20px var(--mc-cyan), 0 0 40px var(--mc-cyan);
+  animation: scanline 3s linear infinite;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+/* Radar Sweep Animation */
+@keyframes radar-sweep {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.radar-sweep {
+  animation: radar-sweep 4s linear infinite;
+}
+
+/* Pulse Animation */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.5;
+    box-shadow: 0 0 10px var(--mc-cyan-dim);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 30px var(--mc-cyan);
+  }
+}
+
+.pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite;
+}
+
+/* Data Stream Animation */
+@keyframes data-stream {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(100vh);
+    opacity: 0;
+  }
+}
+
+.data-stream {
+  animation: data-stream 8s linear infinite;
+}
+
+/* Blink Animation */
+@keyframes blink {
+  0%, 50% {
+    opacity: 1;
+  }
+  51%, 100% {
+    opacity: 0;
+  }
+}
+
+.blink {
+  animation: blink 1s step-end infinite;
+}
+
+/* Typing Cursor */
+@keyframes typing-cursor {
+  0%, 100% {
+    border-color: transparent;
+  }
+  50% {
+    border-color: var(--mc-cyan);
+  }
+}
+
+.typing-cursor {
+  border-right: 2px solid var(--mc-cyan);
+  animation: typing-cursor 0.75s step-end infinite;
+}
+
+/* Glitch Effect */
+@keyframes glitch {
+  0% {
+    clip-path: inset(40% 0 61% 0);
+    transform: translate(-2px, 2px);
+  }
+  20% {
+    clip-path: inset(92% 0 1% 0);
+    transform: translate(2px, -2px);
+  }
+  40% {
+    clip-path: inset(43% 0 1% 0);
+    transform: translate(-2px, 2px);
+  }
+  60% {
+    clip-path: inset(25% 0 58% 0);
+    transform: translate(2px, -2px);
+  }
+  80% {
+    clip-path: inset(54% 0 7% 0);
+    transform: translate(-2px, 2px);
+  }
+  100% {
+    clip-path: inset(58% 0 43% 0);
+    transform: translate(2px, -2px);
+  }
+}
+
+.glitch {
+  position: relative;
+}
+
+.glitch::before,
+.glitch::after {
+  content: attr(data-text);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.glitch::before {
+  color: var(--mc-red);
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+  clip-path: inset(0 0 0 0);
+}
+
+.glitch::after {
+  color: var(--mc-cyan);
+  animation: glitch 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+  clip-path: inset(0 0 0 0);
+}
+
+/* HUD Corner Brackets */
+.hud-corner {
+  position: relative;
+}
+
+.hud-corner::before,
+.hud-corner::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--mc-cyan);
+  pointer-events: none;
+  transition: all 0.3s ease;
+}
+
+.hud-corner::before {
+  top: -2px;
+  left: -2px;
+  border-right: none;
+  border-bottom: none;
+}
+
+.hud-corner::after {
+  bottom: -2px;
+  right: -2px;
+  border-left: none;
+  border-top: none;
+}
+
+.hud-corner:hover::before,
+.hud-corner:hover::after {
+  width: 30px;
+  height: 30px;
+  box-shadow: 0 0 15px var(--mc-cyan-dim);
+}
+
+/* Module Card Styles */
+.module-card {
+  background: linear-gradient(135deg, rgba(10, 15, 28, 0.9), rgba(13, 20, 41, 0.8));
+  border: 1px solid var(--hud-line);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.module-card:hover {
+  border-color: var(--mc-cyan);
+  box-shadow: 0 0 30px var(--mc-cyan-dim), inset 0 0 30px rgba(0, 240, 255, 0.05);
+}
+
+/* Status Indicators */
+.status-online {
+  color: var(--mc-green);
+  text-shadow: 0 0 10px var(--mc-green-dim);
+}
+
+.status-warning {
+  color: var(--mc-orange);
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+}
+
+.status-critical {
+  color: var(--mc-red);
+  text-shadow: 0 0 10px rgba(255, 0, 64, 0.3);
+}
+
+/* Terminal Text */
+.terminal-text {
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 0.05em;
+}
+
+/* Hexagon Shape */
+.hexagon {
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+}
+
+/* Glass Effect */
+.glass {
+  background: rgba(10, 15, 28, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 240, 255, 0.1);
+}
+
+/* Energy Pulse */
+@keyframes energy-pulse {
+  0% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+.energy-pulse {
+  animation: energy-pulse 1s ease-out infinite;
+}
+
+/* Circuit Pattern */
+.circuit-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10 10h80v80h-80z' fill='none' stroke='rgba(0,240,255,0.1)' stroke-width='0.5'/%3E%3Ccircle cx='10' cy='10' r='2' fill='rgba(0,240,255,0.2)'/%3E%3Ccircle cx='90' cy='10' r='2' fill='rgba(0,240,255,0.2)'/%3E%3Ccircle cx='10' cy='90' r='2' fill='rgba(0,240,255,0.2)'/%3E%3Ccircle cx='90' cy='90' r='2' fill='rgba(0,240,255,0.2)'/%3E%3C/svg%3E");
+  background-size: 50px 50px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  body {
+    cursor: auto;
+  }
+  
+  .scanning-line {
+    display: none;
+  }
+}
+
+/* Utility Classes */
+.text-glow {
+  text-shadow: 0 0 10px currentColor;
+}
+
+.border-glow {
+  box-shadow: 0 0 20px var(--mc-cyan-dim);
+}
+
+.bg-gradient-radial {
+  background: radial-gradient(ellipse at center, rgba(0, 240, 255, 0.1) 0%, transparent 70%);
+}
+
+/* Loading Animation */
+@keyframes loading-bar {
+  0% {
+    width: 0%;
+  }
+  50% {
+    width: 70%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+.loading-bar {
+  animation: loading-bar 2s ease-in-out infinite;
+}
+
+/* Floating Animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+.floating {
+  animation: float 3s ease-in-out infinite;
+}
+
+/* Rotate Animation */
+@keyframes rotate-slow {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.rotate-slow {
+  animation: rotate-slow 20s linear infinite;
+}
+
+/* Shimmer Effect */
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.shimmer {
+  background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
